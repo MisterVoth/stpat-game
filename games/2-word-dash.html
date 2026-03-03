@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>2) Leprechaun Word Dash</title>
+  <link rel="stylesheet" href="../assets/styles.css"/>
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="badge"><b>St. Patrick’s Day Team Challenge</b> <span class="small">A → C</span></div>
+      <h1>2) Leprechaun Word Dash</h1>
+      <p>Fast vocabulary scramble + short production (letters shuffle on load).</p>
+      <div class="meta">
+        <span><a href="../index.html">← Home / QR Grid</a></span>
+        <span><button class="print" onclick="window.print()">Print</button></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding:18px 18px 0">
+
+    <div class="card">
+      <h2>How to play</h2>
+      <ul>
+        <li>Choose a level. Unscramble the words.</li>
+        <li>Level B and C include a short writing task.</li>
+        <li>Show your answers to the teacher for points.</li>
+      </ul>
+    </div>
+
+    <div class="card" data-tabs>
+      <div class="tabs">
+        <button class="tabbtn">Level A</button>
+        <button class="tabbtn">Level B</button>
+        <button class="tabbtn">Level C</button>
+      </div>
+
+      <!-- LEVEL A -->
+      <section class="level">
+        <div class="callout"><b>Goal:</b> Unscramble all 5 words.</div>
+
+        <div class="word-row" data-word="GREEN" data-shuffle></div>
+        <div class="word-row" data-word="LUCKY" data-shuffle></div>
+        <div class="word-row" data-word="GOLD" data-shuffle></div>
+        <div class="word-row" data-word="POTATO" data-shuffle></div>
+        <div class="word-row" data-word="MARCH" data-shuffle></div>
+
+        <p class="small"><b>Teacher check:</b> 5 correct = 1 point.</p>
+      </section>
+
+      <!-- LEVEL B -->
+      <section class="level">
+        <div class="callout"><b>Goal:</b> Unscramble all 5 words, then write <b>one</b> sentence using <b>two</b> of them.</div>
+
+        <div class="word-row" data-word="PARADE" data-shuffle></div>
+        <div class="word-row" data-word="RAINBOW" data-shuffle></div>
+        <div class="word-row" data-word="CELEBRATE" data-shuffle></div>
+        <div class="word-row" data-word="MUSIC" data-shuffle></div>
+        <div class="word-row" data-word="SYMBOL" data-shuffle></div>
+
+        <p class="small"><b>Teacher check:</b> correct words + sentence = 2 points.</p>
+      </section>
+
+      <!-- LEVEL B1+ -->
+      <section class="level">
+        <div class="callout"><b>Goal:</b> Unscramble all 5 words, then write 2–3 sentences answering: <b>Why do people celebrate St. Patrick’s Day?</b> Use at least <b>two</b> words.</div>
+
+        <div class="word-row" data-word="TRADITION" data-shuffle></div>
+        <div class="word-row" data-word="CULTURE" data-shuffle></div>
+        <div class="word-row" data-word="HOLIDAY" data-shuffle></div>
+        <div class="word-row" data-word="FESTIVITY" data-shuffle></div>
+        <div class="word-row" data-word="FESTIVALS" data-shuffle></div>
+
+        <p class="small"><b>Teacher check:</b> correct words + clear explanation = 3 points.</p>
+      </section>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <hr/>
+      <div class="small">Teacher scoring: Level A = 1 point, Level B = 2 points, Level C = 3 points. Optional: +1 collaboration token (cap per team or class).</div>
+    </div>
+  </footer>
+</body>
+</html>
