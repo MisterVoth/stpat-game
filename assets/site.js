@@ -24,9 +24,46 @@ function shuffle(arr){
 /* -------------------------------
    Lucky Links (4x4 word grid)
 -------------------------------- */
+
+const GROUP_COLORS = [
+  { bg: 'rgba(27,122,82,.22)',   border: '#1b7a52' },  // group 1 - medium green
+  { bg: 'rgba(90,170,80,.28)',   border: '#4caf50' },  // group 2 - lighter green
+  { bg: 'rgba(10,80,50,.30)',    border: '#0a5032' },  // group 3 - dark forest green
+  { bg: 'rgba(180,215,100,.40)', border: '#8aab00' },  // group 4 - yellow-green
+];
+
+function applyGroupStyle(td, groupIndex){
+  if(groupIndex === null){
+    td.style.background = '';
+    td.style.borderColor = '';
+  } else {
+    const c = GROUP_COLORS[groupIndex];
+    td.style.background = c.bg;
+    td.style.borderColor = c.border;
+  }
+}
+
 function buildGrid(el){
   const words = el.dataset.words.split(',').map(w => w.trim());
   shuffle(words);
+
+  // totalSelected tracks how many tiles are currently colored.
+  // Selecting a new tile assigns it group = Math.floor(totalSelected / 4).
+  // Deselecting only clears that one tile — nothing else moves.
+  let totalSelected = 0;
+
+  function handleTileClick(td){
+    if(td.classList.contains('selected')){
+      td.classList.remove('selected');
+      applyGroupStyle(td, null);
+      totalSelected--;
+    } else {
+      if(totalSelected >= 16) return;
+      applyGroupStyle(td, Math.floor(totalSelected / 4));
+      td.classList.add('selected');
+      totalSelected++;
+    }
+  }
 
   const table = document.createElement('table');
   const tbody = document.createElement('tbody');
@@ -36,7 +73,7 @@ function buildGrid(el){
     for(let c=0;c<4;c++){
       const td = document.createElement('td');
       td.textContent = words[r*4+c];
-      td.addEventListener('click', ()=>td.classList.toggle('selected'));
+      td.addEventListener('click', ()=>handleTileClick(td));
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
@@ -52,7 +89,6 @@ function setupWordGrids(){
     buildGrid(grid);
 
     const container = grid.closest('.level');
-
     const shuffleBtn = container.querySelector('.shuffle-btn');
     const answerBtn = container.querySelector('.answer-btn');
     const answerOverlay = container.querySelector('.answer-overlay');
@@ -94,20 +130,15 @@ function formatAnswers(answerString){
 
 /* -------------------------------
    Word Dash (letter token rows)
-   Usage in HTML:
-   <div class="word-row" data-word="GREEN" data-shuffle></div>
 -------------------------------- */
 function shuffledLetters(word){
-  // Make sure we don't accidentally return the original word unchanged.
   const original = word.split('');
   let attempt = original.slice();
   let tries = 0;
-
   do {
     attempt = shuffle(original.slice());
     tries++;
   } while (attempt.join('') === word && tries < 10);
-
   return attempt;
 }
 
@@ -125,7 +156,6 @@ function setupWordRows(){
   document.querySelectorAll('.word-row[data-word][data-shuffle]').forEach(row=>{
     const word = (row.dataset.word || '').trim().toUpperCase();
     if(!word) return;
-
     const letters = shuffledLetters(word);
     renderWordRow(row, letters);
   });
@@ -134,5 +164,5 @@ function setupWordRows(){
 window.addEventListener('DOMContentLoaded', ()=>{
   setupTabs();
   setupWordGrids();
-  setupWordRows(); // <-- NEW (Word Dash token shuffle)
+  setupWordRows();
 });

@@ -186,9 +186,9 @@ th{background:#f2f6f4;text-align:left}
 
 
 
+/* group colors are applied inline via JS; .selected just marks tile as chosen */
 .wordgrid td.selected {
-  background:rgba(27,122,82,.15);
-  border-color:var(--accent);
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
 }
 
 .wordgrid.fade {
