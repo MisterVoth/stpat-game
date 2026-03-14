@@ -251,3 +251,22 @@ th{background:#f2f6f4;text-align:left}
 @media (hover:hover){
   .letter:hover{ transform:scale(1.1); }
 }
+/* Word Dash – selected letter */
+.letter-selected {
+  background: linear-gradient(145deg, #c9a227, #a07c10) !important;
+  box-shadow: 0 4px 14px rgba(201,162,39,.5) !important;
+  transform: scale(1.15);
+}
+
+/* Word Dash – correct (all letters in right order) */
+.letter-correct {
+  background: linear-gradient(145deg, #c9a227, #a07c10) !important;
+  box-shadow: 0 4px 10px rgba(201,162,39,.4) !important;
+  animation: pop .3s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}

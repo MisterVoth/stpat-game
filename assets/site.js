@@ -128,6 +128,8 @@ function formatAnswers(answerString){
 
 /* -------------------------------
    Word Dash (letter token rows)
+   Click a letter to select it, then click another to swap.
+   If the resulting order matches the answer, the row turns gold.
 -------------------------------- */
 function shuffledLetters(word){
   const original = word.split('');
@@ -140,22 +142,54 @@ function shuffledLetters(word){
   return attempt;
 }
 
-function renderWordRow(rowEl, letters){
-  rowEl.innerHTML = '';
-  letters.forEach(ch => {
-    const token = document.createElement('div');
-    token.className = 'letter';
-    token.textContent = ch;
-    rowEl.appendChild(token);
-  });
-}
-
 function setupWordRows(){
   document.querySelectorAll('.word-row[data-word][data-shuffle]').forEach(row=>{
     const word = (row.dataset.word || '').trim().toUpperCase();
     if(!word) return;
+
     const letters = shuffledLetters(word);
-    renderWordRow(row, letters);
+    let selected = null; // currently selected token element
+
+    row.innerHTML = '';
+
+    letters.forEach(ch => {
+      const token = document.createElement('div');
+      token.className = 'letter';
+      token.textContent = ch;
+
+      token.addEventListener('click', ()=>{
+        // If row is already solved, do nothing
+        if(row.classList.contains('solved')) return;
+
+        if(selected === null){
+          // First click: select this token
+          selected = token;
+          token.classList.add('letter-selected');
+        } else if(selected === token){
+          // Clicked same token again: deselect
+          selected.classList.remove('letter-selected');
+          selected = null;
+        } else {
+          // Second click on a different token: swap letters
+          const tmp = selected.textContent;
+          selected.textContent = token.textContent;
+          token.textContent = tmp;
+
+          selected.classList.remove('letter-selected');
+          selected = null;
+
+          // Check if solved
+          const current = Array.from(row.querySelectorAll('.letter'))
+                               .map(t => t.textContent).join('');
+          if(current === word){
+            row.classList.add('solved');
+            row.querySelectorAll('.letter').forEach(t => t.classList.add('letter-correct'));
+          }
+        }
+      });
+
+      row.appendChild(token);
+    });
   });
 }
 
@@ -164,3 +198,4 @@ window.addEventListener('DOMContentLoaded', ()=>{
   setupWordGrids();
   setupWordRows();
 });
+
