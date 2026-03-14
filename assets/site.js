@@ -25,6 +25,7 @@ function shuffle(arr){
    Lucky Links (4x4 word grid)
 -------------------------------- */
 
+// null = white (unassigned), then cycles through 0–3
 const GROUP_COLORS = [
   { bg: 'rgba(27,122,82,.22)',   border: '#1b7a52' },  // group 1 - medium green
   { bg: 'rgba(90,170,80,.28)',   border: '#4caf50' },  // group 2 - lighter green
@@ -36,34 +37,18 @@ function applyGroupStyle(td, groupIndex){
   if(groupIndex === null){
     td.style.background = '';
     td.style.borderColor = '';
+    td.classList.remove('selected');
   } else {
     const c = GROUP_COLORS[groupIndex];
     td.style.background = c.bg;
     td.style.borderColor = c.border;
+    td.classList.add('selected');
   }
 }
 
 function buildGrid(el){
   const words = el.dataset.words.split(',').map(w => w.trim());
   shuffle(words);
-
-  // totalSelected tracks how many tiles are currently colored.
-  // Selecting a new tile assigns it group = Math.floor(totalSelected / 4).
-  // Deselecting only clears that one tile — nothing else moves.
-  let totalSelected = 0;
-
-  function handleTileClick(td){
-    if(td.classList.contains('selected')){
-      td.classList.remove('selected');
-      applyGroupStyle(td, null);
-      totalSelected--;
-    } else {
-      if(totalSelected >= 16) return;
-      applyGroupStyle(td, Math.floor(totalSelected / 4));
-      td.classList.add('selected');
-      totalSelected++;
-    }
-  }
 
   const table = document.createElement('table');
   const tbody = document.createElement('tbody');
@@ -73,7 +58,20 @@ function buildGrid(el){
     for(let c=0;c<4;c++){
       const td = document.createElement('td');
       td.textContent = words[r*4+c];
-      td.addEventListener('click', ()=>handleTileClick(td));
+      td._groupIndex = null; // tracks this tile's current state
+
+      td.addEventListener('click', ()=>{
+        // Cycle: null -> 0 -> 1 -> 2 -> 3 -> null -> ...
+        if(td._groupIndex === null){
+          td._groupIndex = 0;
+        } else if(td._groupIndex < 3){
+          td._groupIndex++;
+        } else {
+          td._groupIndex = null;
+        }
+        applyGroupStyle(td, td._groupIndex);
+      });
+
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
